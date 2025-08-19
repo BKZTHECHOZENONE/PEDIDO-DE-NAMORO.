@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Terminal do Amor ❤</title>
+  <style>
+    body{
+      background:url('heart-bg.gif') repeat;
+      background-size:cover;
+      color:#e6edf3;
+      font-family:monospace;
+      margin:0;
+      padding:20px;
+      overflow:hidden;
+    }
+    #term{
+      background:rgba(0,0,0,0.6);
+      padding:20px;
+      border-radius:8px;
+      min-height:300px;
+      position:relative;
+      z-index:1;
+    }
+    .line{margin:6px 0;position:relative;z-index:2;}
+    input{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+      background:#0d1117;
+      border:1px solid #1f2937;
+      color:#e6edf3;
+      position:relative;
+      z-index:2;
+    }
+    button{
+      padding:6px 12px;
+      margin-top:10px;
+    }
+    .cat{
+      position:absolute;
+      width:50px;
+      height:50px;
+      pointer-events:none;
+      animation:fall 10s linear infinite;
+      z-index:0;
+    }
+    @keyframes fall {0%{top:-50px;}100%{top:100%;}}
+  </style>
+</head>
+<body>
+  <div id="term"></div>
+  <input id="cmd" placeholder="Digite seu comando e pressione Enter">
+  <audio id="bg-music" src="musica.mp3" loop></audio>
+
+  <script>
+    const term = document.getElementById('term');
+    const input = document.getElementById('cmd');
+    const music = document.getElementById('bg-music');
+    const nome = 'Sara';
+    const pergunta = 'Eu te amo desde o primeiro momento que eu olhei nos seus olhos e segurei sua mão, você quer namorar comigo?';
+
+    let stage = 0;
+
+    function line(txt){ 
+      term.innerHTML += '<div class="line">' + txt + '</div>'; 
+      term.scrollTop = term.scrollHeight; 
+    }
+
+    function createCat(){
+      const cat = document.createElement('img');
+      cat.src = 'gato-apaixonado.gif';
+      cat.className = 'cat';
+      cat.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+      cat.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(cat);
+      setTimeout(()=>{cat.remove()},10000);
+    }
+
+    function start(){
+      stage = 1;
+      line('Bem-vindo, ' + nome + '!');
+      line('Primeiro desafio: resolva o enigma: Qual é o número que, se você somar com ele mesmo e depois adicionar 2, resulta em 10?');
+    }
+
+    start();
+
+    input.addEventListener('keypress', e => {
+      if(e.key === 'Enter'){
+        const cmd = input.value.trim().toLowerCase();
+        input.value = '';
+
+        if(stage === 1){
+          if(cmd === '4'){
+            stage = 2;
+            line('Excelente! Segundo desafio: digite a palavra que completa a frase: "Meu coração bate por _".');
+            createCat();
+          } else {
+            line('Resposta incorreta. Tente novamente.');
+          }
+        } else if(stage === 2){
+          if(cmd === 'você'){
+            stage = 3;
+            line('Parabéns! Último passo: digite "sim" para aceitar o meu pedido especial.');
+            createCat();
+          } else {
+            line('Resposta incorreta. Tente novamente.');
+          }
+        } else if(stage === 3){
+          if(cmd === 'sim'){
+            stage = 4;
+            line(pergunta + ' <button onclick="alert(\'Sim!\')">Sim ❤</button>');
+            for(let i=0;i<15;i++) createCat();
+            setTimeout(()=>{line('Sara, você é a pessoa mais incrível que eu já conheci. 💖');},500);
+            setTimeout(()=>{line('Quero estar com você sempre e fazer você feliz. 🌟');},1000);
+            music.play();
+          } else {
+            line('Digite "sim" se deseja continuar.');
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
